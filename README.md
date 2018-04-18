@@ -34,7 +34,7 @@ random_placement
 -----------------------------
 Synopsis
 -----------------------------
-   ./loraDir.py <nodes> <random> <avgsend> <experiment> <simtime> <model>[collision]
+   ./loraDir.py [nodes] [random] [avgsend] [experiment] [simtime] [model] [collision]
 
 -----------------------------
 2017 Luca Gioacchini
