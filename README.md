@@ -1,5 +1,5 @@
 # LoRaSim
-=============================
+
 This is a modification of an existing LoRaSim found here:
 http://www.lancaster.ac.uk/scc/sites/lora/lorasim.html
 LoRaSim is a discrete-event simulator based on SimPy for simulating collisions in LoRa networks and to analyse scalability.
@@ -30,6 +30,11 @@ random_placement
     	file he can find some info about each node like Position, Distance or Rssi
     	1 	random placement for nodes
     	0 	placement for nodes passed as imput
+
+-----------------------------
+Synopsis
+-----------------------------
+   ./loraDir.py <nodes> <random> <avgsend> <experiment> <simtime> <model>[collision]
 
 -----------------------------
 2017 Luca Gioacchini
