@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
- LoRaSim 0.2.1: simulate collisions in LoRa
+ LoRaSim 0.3.1: simulate collisions in LoRa
 
  SYNOPSIS:
    ./loraDir.py <nodes> <random> <avgsend> <experiment> <simtime> <model>[collision]
@@ -57,6 +57,8 @@
     whereby X is the experiment number. The file contains a space separated table
     of values for nodes, collisions, transmissions and total energy spent. The
     data file can be easily plotted using e.g. gnuplot.
+
+2017 Luca Gioacchini
 """
 
 import simpy
