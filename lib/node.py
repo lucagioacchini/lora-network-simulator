@@ -4,6 +4,8 @@ import random
 import math
 from common import *
 
+random.seed(SEED)
+
 class RandomNode():
 	def __init__(self, nodeid, bs, packetlen):
 		self.nodeid = nodeid
@@ -31,22 +33,21 @@ class RandomNode():
 				self.y = posy
 				found = True
 				
-		dist_old = np.sqrt((self.x-BSX)*(self.x-BSX)+(self.y-BSY)*(self.y-BSY))
-		self.dist = np.sqrt((dist_old)**2+(HB-HM)**2)
-		self.packet = Packet(self.nodeid, packetlen, self.dist)
+		dist_2d = np.sqrt((self.x-BSX)*(self.x-BSX)+(self.y-BSY)*(self.y-BSY))
+		self.dist = np.sqrt((dist_2d)**2+(HB-HM)**2)
+		self.packet = Packet(self.nodeid, packetlen, self.dist, HM)
 		self.sent = 0
 
 		
-class fixedNode(): #random_placement = False
-	def __init__(self, nodeid, bs, period, packetlen, posx, posy):
+class fixedNode():
+	def __init__(self, nodeid, bs, packetlen, posx, posy, h, dist):
 		self.nodeid = nodeid
-		self.period = period
 		self.bs = bs
 		self.x = posx
 		self.y = posy
+		self.height = h
+		self.dist = dist
 
-		dist_old = np.sqrt((self.x-BSX)**2+(self.y-BSY)**2)
-		self.dist = np.sqrt((dist_old)**2+(HB-HM)**2)
 		self.packet = Packet(self.nodeid, packetlen, self.dist)
 		self.sent = 0
 		
@@ -54,10 +55,9 @@ class fixedNode(): #random_placement = False
 			"nodeId":self.nodeid,
 			"posx":self.x,
 			"posy":self.y,
-			"posz":HM,
+			"posz":self.height,
 			"distance":self.dist,
 			"rssi":self.packet.rssi,
-			"snr":self.snr,
 		}
 		
 		nodeReport(data)

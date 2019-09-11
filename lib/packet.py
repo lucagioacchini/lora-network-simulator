@@ -3,11 +3,14 @@ from config import *
 import random
 import math
 
+random.seed(SEED)
+
 class Packet():
 	def __init__(self, nodeid, plen, distance):
 		self.nodeid = nodeid
 		self.txpow = PTX
 		self.dist = distance
+
 		# randomize configuration values
 		self.sf = random.randint(6,12)
 		self.cr = random.randint(1,4)
@@ -31,10 +34,17 @@ class Packet():
 		self.freq = 860000000 + random.randint(0,2622950)
 		# for certain conf.conf.EXPeriments override these and
 		# choose some random frequences
+
 		if conf.EXP == 1:
 			self.freq = random.choice([860000000, 864000000, 868000000])
 		else:
 			self.freq = 860000000
+		
+		if conf.EXP == 7:
+			self.sf = 7
+			self.cr = 1
+			self.bw = 125
+			self.freq = 868000000
 			
 		Prx = self.txpow  ## zero path loss by default
 		Lpl = self.estimatePathLoss()
@@ -77,38 +87,21 @@ class Packet():
 		self.symTime = (2.0**self.sf)/self.bw
 		self.arriveTime = 0
 		self.rssi = Prx
-		self.estimateSNR()
-		self.snr_tx = PTX-(self.rssi - PTX)
-		self.snr_rx = 10*math.log10(self.rssi/(self.rssi - PTX))
 		self.rectime = self.airtime(self.sf,self.cr,self.pl,self.bw)
 		self.collided = 0
-		self.processed = 0    
-		
-		print "rssi: {:.2f}dBm".format(self.rssi)
-		print "ptx: {:.2f}dBm".format(PTX)
-		#print "SNR_tx = {}, SNR_rx = {}".format(self.snr_tx, self.snr_rx)
+		self.processed = 0  
+		print self.rssi
 	
-	def estimateSNR(self):
-		# convert the rssi and the transmitted power from dBm to mW
-		prx_mw = 10**(self.rssi/10.0)
-		print "rssi:{} mW".format(prx_mw)
-		ptx_mw = math.pow(10, PTX/10.0)
-		print "ptx:{} mW".format(ptx_mw)
-		
-		p_noise = 10*math.log10(ptx_mw - prx_mw) + 30
-		print "pnoise: {} dBm".format(p_noise)
-		print "SNR: {} dBm".format(self.rssi - p_noise)
 	def estimatePathLoss(self):	
 		# Log-Distance model
 		if conf.MODEL == 0: 
 			Lpl = LPLD0 + 10*GAMMA*math.log10(self.dist/D0)
-		
 				
 		# Okumura-Hata model
 		elif conf.MODEL >= 1 and conf.MODEL <= 4:
 			#small and medium-size cities
 			if conf.MODEL == 1:
-				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM
+				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM \
 				- (1.56*(math.log10(self.freq)-math.log10(1000000))-0.8)
 				
 				C = 0 
@@ -121,25 +114,25 @@ class Packet():
 				C = 0
 			#suburban enviroments
 			elif conf.MODEL == 3:
-				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM
+				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM \
 				- (1.56*(math.log10(self.freq)-math.log10(1000000))-0.8)
 				
 				C = -2*((math.log10(self.freq)-math.log10(28000000))**2) - 5.4
 			#rural area
 			elif conf.MODEL == 4:
-				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM
+				ahm = (1.1*(math.log10(self.freq)-math.log10(1000000))-0.7)*HM \
 				- (1.56*(math.log10(self.freq)-math.log10(1000000))-0.8)
 				
-				C = -4.78*((math.log10(self.freq)-math.log10(1000000))**2) 
+				C = -4.78*((math.log10(self.freq)-math.log10(1000000))**2) \
 				+18.33*(math.log10(self.freq)-math.log10(1000000)) - 40.98
 				
-			A = 69.55 + 26.16*(math.log10(self.freq)-math.log10(1000000))
+			A = 69.55 + 26.16*(math.log10(self.freq)-math.log10(1000000)) \
 			- 13.82*math.log(HB) - ahm
 			
 			B = 44.9-6.55*math.log10(HB)
 
-			Lpl = A + B*(math.log10(self.dist)-math.log10(1000)) + C
-
+			Lpl = A + B*(math.log10(self.dist)-math.log10(1000)) + C		
+			
 		# 3GPP model
 		elif conf.MODEL >= 5:
 			# Suburban Macro
@@ -149,10 +142,10 @@ class Packet():
 			elif conf.MODEL == 6:
 				C = 3 #dB
 				
-			Lpl = (44.9-6.55*math.log10(HB))*math.log10(self.dist/1000)
-			+ 45.5 + (35.46-1.1*HM)*(math.log10(self.freq)-math.log10(1000000))
+			Lpl = (44.9-6.55*math.log10(HB))*math.log10(self.dist/1000) \
+			+ 45.5 + (35.46-1.1*HM)*(math.log10(self.freq)-math.log10(1000000)) \
 			- 13.82*math.log10(HM)+0.7*HM+C
-			
+
 		return Lpl	
 
 

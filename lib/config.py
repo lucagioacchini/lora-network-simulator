@@ -1,13 +1,14 @@
 import numpy as np
 
 # Dynamic
-EXP = 0
+EXP = 7
 MODEL = 0
 FULL_COLLISION = False
 RANDOM = False
 NODES = []
 MAXDIST = 0
 NR_NODES = 0
+RAY = 250
 # Satic
 AVGSENDTIME = 1002000 #ms
 SIMTIME = 3.6e+6 #ms
@@ -19,8 +20,9 @@ D0 = 40.0
 VAR = 0 # variance ignored for now
 LPLD0 = 127.41
 GL = 0
-HM = 1 #m
-HB = 30 #m
+HM = 1#m
+HB = 200 #m
+SEED = 69
 
 SF7 = np.array([7,-126.5,-124.25,-120.75])
 SF8 = np.array([8,-127.25,-126.75,-124.0])
