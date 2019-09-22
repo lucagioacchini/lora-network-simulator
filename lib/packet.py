@@ -2,6 +2,8 @@ import config as conf
 from config import *
 import random
 import math
+import pandas as pd
+from scipy.interpolate import UnivariateSpline
 
 random.seed(SEED)
 
@@ -40,7 +42,8 @@ class Packet():
 		else:
 			self.freq = 860000000
 		
-		if conf.EXP == 7:
+		# On-field experiment
+		if conf.EXP == 7 or conf.EXP == 8 or conf.EXP == 9:
 			self.sf = 7
 			self.cr = 1
 			self.bw = 125
@@ -90,7 +93,6 @@ class Packet():
 		self.rectime = self.airtime(self.sf,self.cr,self.pl,self.bw)
 		self.collided = 0
 		self.processed = 0  
-		print self.rssi
 	
 	def estimatePathLoss(self):	
 		# Log-Distance model
@@ -134,7 +136,7 @@ class Packet():
 			Lpl = A + B*(math.log10(self.dist)-math.log10(1000)) + C		
 			
 		# 3GPP model
-		elif conf.MODEL >= 5:
+		elif conf.MODEL >= 5 and conf.MODEL < 7:
 			# Suburban Macro
 			if conf.MODEL == 5:
 				C = 0  # dB
@@ -142,13 +144,36 @@ class Packet():
 			elif conf.MODEL == 6:
 				C = 3 #dB
 				
-			Lpl = (44.9-6.55*math.log10(HB))*math.log10(self.dist/1000) \
+			Lpl = (44.9-6.55*math.log10(HB))*(math.log10(self.dist) - math.log10(1000)) \
 			+ 45.5 + (35.46-1.1*HM)*(math.log10(self.freq)-math.log10(1000000)) \
 			- 13.82*math.log10(HM)+0.7*HM+C
-
-		return Lpl	
-
-
+		
+		# Polynomial 3rd degree
+		elif conf.MODEL == 7:
+			p1 = -5.491e-06
+			p2 = 0.002936
+			p3 = -0.5004
+			p4 = -70.57
+			
+			Lpl = p1*math.pow(self.dist, 3) + p2*math.pow(self.dist, 2) \
+			+ p3*self.dist + p4
+		
+		# Polynomial 6th degree
+		elif conf.MODEL == 8:
+			p1 = 3.69e-12
+			p2 = 5.997e-11 
+			p3 = -1.381e-06 
+			p4 = 0.0005134 
+			p5 = -0.07318 
+			p6 = 4.254 
+			p7 = -171  
+		
+			Lpl = p1*math.pow(self.dist, 6) + p2*math.pow(self.dist, 5) \
+			+ p3*math.pow(self.dist, 4) + p4*math.pow(self.dist, 3) \
+			+ p5*math.pow(self.dist, 2) + p6*self.dist + p7
+			
+		return Lpl
+		
 	def airtime(self, sf,cr,pl,bw):
 		H = 0        # implicit header disabled (H=0) or not (H=1)
 		DE = 0       # low data rate optimization enabled (=1) or not (=0)

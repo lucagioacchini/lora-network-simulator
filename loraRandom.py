@@ -89,7 +89,6 @@ def transmit(env,node):
 			sensitivity = SENSI[node.packet.sf - 7, [125,250,500].index(node.packet.bw) + 1]
 			if node.packet.rssi < sensitivity:
 				node.packet.lost = True
-				print "rssi lost"
 			else:
 				node.packet.lost = False
 				if (checkcollision(env, node.packet, packetsAtBS)==1):
@@ -147,10 +146,12 @@ elif conf.EXP == 2:
 	minsensi = -112.0 # no experiments, so value from datasheet
 elif conf.EXP in [3,5]:
 	minsensi = np.amin(SENSI)#for Experiment 3 take minimum
+elif conf.EXP == 7 or conf.EXP == 8:
+	minsensi = SENSI[0,2]
 	
 Lpl = PTX - minsensi
-conf.MAXDIST = D0*(math.e**((Lpl-LPLD0)/(10.0*GAMMA)))
-conf.RAY = conf.MAXDIST
+#conf.MAXDIST = D0*(math.e**((Lpl-LPLD0)/(10.0*GAMMA)))
+#conf.RAY = conf.MAXDIST
 graph = Graph()
 
 for i in range(0,conf.NR_NODES):
@@ -169,9 +170,11 @@ sent = sum(n.sent for n in conf.NODES)
 energy = sum(node.packet.rectime * TX[int(node.packet.txpow)+2] * V * node.sent for node in conf.NODES) / 1e6
 der = float(sent-nrCollisions)/float(sent)
 der = float(nrReceived)/float(sent)
-
+print "====================="
+print "DER: {}".format(der)
+print "=====================\n"
 graph.save()
-if not conf.RANDOM:
+if conf.RANDOM:
 	data = {
 		"Nodes":conf.NR_NODES,
 		"Collisions":nrCollisions,

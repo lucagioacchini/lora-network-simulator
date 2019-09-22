@@ -8,21 +8,25 @@ RANDOM = False
 NODES = []
 MAXDIST = 0
 NR_NODES = 0
-RAY = 250
+RAY = 250.0
 # Satic
 AVGSENDTIME = 1002000 #ms
 SIMTIME = 3.6e+6 #ms
-BSX = 0
-BSY = 0
+BSX = 0.0
+BSY = 0.0
 PTX = 14.0
 GAMMA = 2.08
 D0 = 40.0
 VAR = 0 # variance ignored for now
 LPLD0 = 127.41
 GL = 0
-HM = 1#m
-HB = 200 #m
+HM = 1.0#m
+HB = 200.0 #m
 SEED = 69
+
+# Spline smoothing factor
+P = 0.0075799403
+RSSI_PATH = "data/new_data.csv"
 
 SF7 = np.array([7,-126.5,-124.25,-120.75])
 SF8 = np.array([8,-127.25,-126.75,-124.0])

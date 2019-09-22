@@ -19,8 +19,10 @@ class RandomNode():
 			b = random.random()
 			if b<a:
 				a,b = b,a
-			posx = b*conf.MAXDIST*math.cos(2*math.pi*a/b)+BSX
-			posy = b*conf.MAXDIST*math.sin(2*math.pi*a/b)+BSY
+			#posx = b*conf.MAXDIST*math.cos(2*math.pi*a/b)+BSX
+			#posy = b*conf.MAXDIST*math.sin(2*math.pi*a/b)+BSY
+			posx = b*conf.RAY*math.cos(2*math.pi*a/b)+BSX
+			posy = b*conf.RAY*math.sin(2*math.pi*a/b)+BSY
 			if len(conf.NODES) > 0:
 				for index, n in enumerate(conf.NODES):
 					dist = np.sqrt(((abs(n.x-posx))**2)+((abs(n.y-posy))**2))
@@ -34,8 +36,9 @@ class RandomNode():
 				found = True
 				
 		dist_2d = np.sqrt((self.x-BSX)*(self.x-BSX)+(self.y-BSY)*(self.y-BSY))
-		self.dist = np.sqrt((dist_2d)**2+(HB-HM)**2)
-		self.packet = Packet(self.nodeid, packetlen, self.dist, HM)
+		#self.dist = np.sqrt((dist_2d)**2+(HB-HM)**2)
+		self.dist = dist_2d
+		self.packet = Packet(self.nodeid, packetlen, self.dist)
 		self.sent = 0
 
 		

@@ -150,7 +150,7 @@ elif conf.EXP == 2:
 	minsensi = -112.0 # no experiments, so value from datasheet
 elif conf.EXP in [3,5]:
 	minsensi = np.amin(SENSI)#for Experiment 3 take minimum
-elif conf.EXP == 7:
+elif conf.EXP == 7 or conf.EXP == 8:
 	minsensi = SENSI[0,2]
 	
 Lpl = PTX - minsensi
