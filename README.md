@@ -1,4 +1,7 @@
-# LoRaSim
+<p align="right">
+<img src="fig/univpm.png" alt="Logo" width="80" height="80">
+</p>
+# LoRa Networks Simulator
 Discrete-event simulator based on SimPy for simulating collisions in LoRa networks and to analyse scalability.  
 In addition to the [original simulator](http://www.lancaster.ac.uk/scc/sites/lora/lorasim.html), this version has two new features: Model and Random.
 
