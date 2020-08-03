@@ -5,7 +5,7 @@ In addition to the [original simulator](http://www.lancaster.ac.uk/scc/sites/lor
 ## Synopsis
 ```./loraSim.py <nodes> <experiment> <model> [random] [collision]```
 
-## Model
+### Model
 This feature is referred to the path loss model. The two models used are the Log-Distance one and the Okumura Hata one. The second dipends on the height of the Base Station ```hb``` and the Mobile Station ```hm``` which are customizable through the ```main``` section.  
 The implemented pathloss models are:
 * ```0``` set the log-distance model  
@@ -16,7 +16,7 @@ The implemented pathloss models are:
 * ```5``` set the 3GPP for suburban macro-cell  
 * ```6``` set the 3GPP for metropolitan macro-cell  
 
-## Random
+### Random
 By setting ```random_placement = 0```, the user is passing the right position of nodes with a file called ```Position.txt```. At the end of the simulation in the ```Report``` file he can find some info about each node like Position, Distance or RSSI  
 *```1``` random placement for nodes  
 *```0``` placement for nodes passed as imput  
