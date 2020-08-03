@@ -25,6 +25,8 @@ By setting ```random_placement = 0```, the user is passing the right position of
 *```1``` random placement for nodes  
 *```0``` placement for nodes passed as imput  
 
+## Further Reading
+[A Novel Experimental-based Tool for the Design of LoRa Networks](https://ieeexplore.ieee.org/document/8792833)
 
 ##
 (c) 2018 Luca Gioacchini
